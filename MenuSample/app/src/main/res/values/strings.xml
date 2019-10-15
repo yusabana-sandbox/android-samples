@@ -6,6 +6,8 @@
     <string name="menu_list_options_desc">説明を表示</string>
     <string name="menu_list_options_order">ご注文</string>
     <string name="menu_list_context_header">操作を選んでください。</string>
+    <string name="menu_list_context_desc">説明を表示</string>
+    <string name="menu_list_context_order">ご注文</string>
     <string name="tv_thx_title">注文完了</string>
     <string name="tv_thx_desc">以下のメニューのご注文を受け付けました。\nご注文ありがとうございます。</string>
 </resources>
