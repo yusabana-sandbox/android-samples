@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
      */
     private var _cocktailName = ""
 
+    val _helper = DatabaseHelper(this@MainActivity)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,11 +28,37 @@ class MainActivity : AppCompatActivity() {
         lvCocktail.onItemClickListener = ListItemClickListener()
     }
 
+    override fun onDestroy() {
+        _helper.close()
+        super.onDestroy()
+    }
+
     /**
      * 保存ボタンをタップされた時の処理. 諸々クリアする
      */
     fun onSaveButtonClick(view: View) {
         val etNote = findViewById<EditText>(R.id.etNote)
+
+        val note = etNote.text.toString()
+
+        // データベースヘルパーオブジェクトからデータベース接続オブジェクトを取得
+        val db = _helper.writableDatabase
+
+        // まず、リストで選択されたカクテルのメモデータを削除、その後インサートを行う
+        // 削除用のSQL文字列を用意
+        val sqlDelete = "DELETE FROM cocktailmemos WHERE _id = ?"
+        var stmt = db.compileStatement(sqlDelete)
+        stmt.bindLong(1, _cocktailId.toLong())
+        stmt.executeUpdateDelete()
+
+        // インサート用のSQL文字列の用意
+        val sqlInsert = "INSERT INTO cocktailmemos (_id, name, note) VALUES (?, ?, ?)"
+        stmt = db.compileStatement(sqlInsert)
+        stmt.bindLong(1, _cocktailId.toLong())
+        stmt.bindString(2, _cocktailName)
+        stmt.bindString(3, note)
+        stmt.executeInsert()
+
         // 感想欄の入力を消去
         etNote.setText("")
 
@@ -55,6 +83,19 @@ class MainActivity : AppCompatActivity() {
 
             val btnSave = findViewById<Button>(R.id.btnSave)
             btnSave.isEnabled = true
+
+            val db = _helper.writableDatabase
+            val sql = "SELECT * FROM cocktailmemos WHERE _id = ${_cocktailId}"
+            val cursor = db.rawQuery(sql, null)
+
+            var note = ""
+            while(cursor.moveToNext()) {
+                val idxNote = cursor.getColumnIndex("note")
+                note = cursor.getString(idxNote)
+            }
+
+            val etNote = findViewById<EditText>(R.id.etNote)
+            etNote.setText(note)
         }
     }
 }
