@@ -11,6 +11,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val fromNotification = intent.getBooleanExtra("fromNotification", false)
+
+        if (fromNotification) {
+            // 再生ボタンをタップ不可に停止ボタンをタップ可に変更
+            val btPlay = findViewById<Button>(R.id.btPlay)
+            val btStop = findViewById<Button>(R.id.btStop)
+
+            btPlay.isEnabled = false
+            btStop.isEnabled = true
+        }
     }
 
     fun onPlayButtonClick(view: View) {
@@ -19,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         startService(intent)
 
-        // 再生ボタンをタップ不可に停止ボタンをタップ化に変更
+        // 再生ボタンをタップ不可に停止ボタンをタップ可に変更
         val btPlay = findViewById<Button>(R.id.btPlay)
         val btStop = findViewById<Button>(R.id.btStop)
 
