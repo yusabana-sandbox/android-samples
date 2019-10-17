@@ -1,8 +1,10 @@
 package com.yusabanasandbox.android.coordinatorlayoutsample
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.CollapsingToolbarLayout
 
@@ -20,5 +22,10 @@ class MainActivity : AppCompatActivity() {
         toolbarLayout.title = getString(R.string.toolbar_title)
         toolbarLayout.setExpandedTitleColor(Color.WHITE)
         toolbarLayout.setCollapsedTitleTextColor(Color.LTGRAY)
+    }
+
+    fun onEmailButtonClick(view: View) {
+        val intent = Intent(applicationContext, EmailDetailActivity::class.java)
+        startActivity(intent)
     }
 }

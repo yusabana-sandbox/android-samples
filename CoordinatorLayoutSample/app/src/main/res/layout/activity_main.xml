@@ -14,7 +14,7 @@
             android:id="@+id/toobarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed" >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -40,5 +40,15 @@
 
     </androidx.core.widget.NestedScrollView>
 
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|end"
+        android:onClick="onEmailButtonClick"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
