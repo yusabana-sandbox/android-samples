@@ -3,11 +3,14 @@ package com.yusabanasandbox.android.recycleviewsample
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -31,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         val lvMenu = findViewById<RecyclerView>(R.id.lvMenu)
 
         // RecyclerViewにレイアウトマネージャーとしてLinerLayoutManagerを設定
-        lvMenu.layoutManager = LinearLayoutManager(applicationContext)
+        val layout = LinearLayoutManager(applicationContext)
+        lvMenu.layoutManager = layout
 
         // 定食メニューリストデータを生成
         val menuList = createTeishokuList()
@@ -39,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         val adapter = RecyclerListAdapter(menuList)
         // RecyclerViewにアダプタオブジェクトを設定
         lvMenu.adapter = adapter
+
+        // 区切り専用のオブジェクトを生成
+        val decorator = DividerItemDecoration(applicationContext, layout.orientation)
+        lvMenu.addItemDecoration(decorator)
     }
 
     private fun createTeishokuList(): MutableList<MutableMap<String, Any>> {
@@ -72,7 +80,27 @@ class MainActivity : AppCompatActivity() {
                 "desc" to "生姜焼きにサラダ、ご飯とお味噌汁がつきます"
             )
         )
-        menuList.add(mutableMapOf("name" to "焼肉", "price" to 950, "desc" to "焼肉にサラダ、ご飯とお味噌汁がつきます"))
+        menuList.add(
+            mutableMapOf(
+                "name" to "焼肉定食",
+                "price" to 950,
+                "desc" to "焼肉にサラダ、ご飯とお味噌汁がつきます"
+            )
+        )
+        menuList.add(
+            mutableMapOf(
+                "name" to "すき焼き",
+                "price" to 950,
+                "desc" to "すき焼きにサラダ、ご飯とお味噌汁がつきます"
+            )
+        )
+        menuList.add(
+            mutableMapOf(
+                "name" to "たこ焼き",
+                "price" to 950,
+                "desc" to "たこ焼きにサラダ、ご飯とお味噌汁がつきます"
+            )
+        )
 
         return menuList
     }
@@ -100,6 +128,9 @@ class MainActivity : AppCompatActivity() {
             // row.xmlをインフレートし、1行分の画面部品とする
             val view = inflater.inflate(R.layout.row, parent, false)
 
+            // 1行分のクリック時のリスナーを設定
+            view.setOnClickListener(ItemClickListener())
+
             // ビューホルダオブジェクト生成して、returnする
             return RecyclerListViewHolder(view)
         }
@@ -125,5 +156,18 @@ class MainActivity : AppCompatActivity() {
             // リストデータ中の件数をリターン
             return _listData.size
         }
+    }
+
+    private inner class ItemClickListener : View.OnClickListener {
+        override fun onClick(view: View) {
+            // タップされたLinerLayout内にあるメニュー名表示TextViewを取得
+            val tvMenuName = view.findViewById<TextView>(R.id.tvMenuName)
+            // メニュー名表示TextViewから表示されているメニュー名の文字列を取得
+            val menuName = tvMenuName.text.toString()
+            // トーストに表示する文字列
+            val msg = getString(R.string.msg_header) + menuName
+            Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
+        }
+
     }
 }
